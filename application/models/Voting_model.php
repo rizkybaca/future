@@ -8,7 +8,7 @@ class Voting_model extends CI_Model
 {
 	public function getUserBySession()
 	{
-		return $data['user']=$this->db->get_where('user', ['nim' => $this->session->userdata('nim')])->row_array();
+		return $data['user'] = $this->db->get_where('user', ['nim' => $this->session->userdata('nim')])->row_array();
 	}
 
 	public function getAllCandidate()
@@ -19,7 +19,7 @@ class Voting_model extends CI_Model
 
 	public function getCandidateStat()
 	{
-		$q="SELECT `name`
+		$q = "SELECT `name`
 				FROM `candidate`
 				ORDER BY `id` ASC
 		";
@@ -28,17 +28,19 @@ class Voting_model extends CI_Model
 
 	public function getVoteStat()
 	{
-		$q="SELECT
-					COUNT(`id`) AS `voting`, `candidate_id`
+		$q = "SELECT
+					COUNT(`vote`.`id`) AS `voting`, `vote`.`candidate_id` AS `id`, `candidate`.`name` AS `name`
 					FROM `vote`
-					GROUP BY `candidate_id` 					
+					JOIN `candidate`
+					ON `vote`.`candidate_id`=`candidate`.`id`
+					GROUP BY `vote`.`candidate_id` 					
 				";
 		return $this->db->query($q)->result_array();
 	}
 
 	public function getAllVoteStat()
 	{
-		$q="SELECT
+		$q = "SELECT
 					COUNT(`vote`.`id`) AS `voting`, `candidate`.`name` AS `name`
 					FROM `vote` JOIN `candidate`
 					ON `vote`.`candidate_id` = `candidate`.`id`
@@ -49,12 +51,11 @@ class Voting_model extends CI_Model
 
 	public function getCandidateById($id)
 	{
-		return $this->db->get_where('candidate', ['id'=>$id])->row_array();
+		return $this->db->get_where('candidate', ['id' => $id])->row_array();
 	}
 
 	public function getAllVote()
 	{
 		return $this->db->get('vote')->result_array();
 	}
-	
 }

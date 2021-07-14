@@ -1,5 +1,5 @@
 <?php
-class VotingApi_model extends CI_Model
+class CandidateApi_model extends CI_Model
 {
   public function getCandidate($id = null)
   {
