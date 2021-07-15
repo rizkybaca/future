@@ -32,4 +32,22 @@ class User extends Rest_Controller
       ], REST_Controller::HTTP_NOT_FOUND);
     }
   }
+  public function index_put()
+  {
+    $id = $this->put('id');
+    $data = [
+      'status' => $this->put('status')
+    ];
+    if ($this->user->updateUser($data, $id) > 0) {
+      $this->response([
+        'status' => true,
+        'message' => 'user has been modified!'
+      ], REST_Controller::HTTP_OK);
+    } else {
+      $this->response([
+        'status' => false,
+        'message' => 'failed to modified user!'
+      ], REST_Controller::HTTP_BAD_REQUEST);
+    }
+  }
 }

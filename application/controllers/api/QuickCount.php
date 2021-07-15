@@ -30,5 +30,5 @@ class QuickCount extends Rest_Controller
         'message' => 'no candidate were found'
       ], REST_Controller::HTTP_NOT_FOUND);
     }
-  }
+  } 
 }
