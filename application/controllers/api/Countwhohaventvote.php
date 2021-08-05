@@ -4,27 +4,22 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 use Restserver\Libraries\REST_Controller;
 
-class Candidate extends Rest_Controller
+class Countwhohaventvote extends Rest_Controller
 {
   public function __construct()
   {
     parent::__construct();
-    $this->load->model('CandidateApi_model', 'candidate');
+    $this->load->model('CountallvoterApi_model', 'cav');
 
     $this->methods['index_get']['limit'] = 100;
   }
   public function index_get()
   {
-    $id = $this->get('id');
+    $user = $this->cav->getWhoHaventVote();
 
-    if ($id === NULL) {
-      $candidate = $this->candidate->getCandidate();
-    } else {
-      $candidate = $this->candidate->getCandidate($id);
-    }
-    if ($candidate) {
+    if ($user) {
       $this->response(
-        $candidate,
+        $user,
         REST_Controller::HTTP_OK
       );
     } else {
