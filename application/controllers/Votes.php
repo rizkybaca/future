@@ -20,7 +20,7 @@ class Votes extends CI_Controller
     $data['user'] = $this->votes->getUserBySession();
     $data['candidate'] = $this->votes->getAllCandidate();
 
-    $this->form_validation->set_rules('nim', 'NIM', 'required|trim|is_unique[candidate.nim]|numeric');
+    $this->form_validation->set_rules('email', 'email', 'required|trim|is_unique[candidate.email]|numeric');
     $this->form_validation->set_rules('name', 'Full name', 'required|trim');
     $this->form_validation->set_rules('vision', 'Vision', 'required|trim');
     $this->form_validation->set_rules('mission', 'Mission', 'required|trim');
@@ -56,7 +56,7 @@ class Votes extends CI_Controller
       }
 
       $data = [
-        'nim' => $this->input->post('nim', true),
+        'email' => $this->input->post('email', true),
         'name' => $this->input->post('name', true),
         'image' => $new_image,
         'vision' => $this->input->post('vision', true),
@@ -74,7 +74,7 @@ class Votes extends CI_Controller
     $data['user'] = $this->votes->getUserBySession();
     $data['candidate'] = $this->votes->getCandidateById($id);
 
-    $this->form_validation->set_rules('nim', 'NIM', 'required|trim|numeric');
+    $this->form_validation->set_rules('email', 'email', 'required|trim|numeric');
     $this->form_validation->set_rules('name', 'Full name', 'required|trim');
     $this->form_validation->set_rules('vision', 'Vision', 'required|trim');
     $this->form_validation->set_rules('mission', 'Mission', 'required|trim');
@@ -87,7 +87,7 @@ class Votes extends CI_Controller
       $this->load->view('templates/footer');
     } else {
 
-      $nim      = $this->input->post('nim', true);
+      $email      = $this->input->post('email', true);
       $name     = $this->input->post('name', true);
       $vision   = $this->input->post('vision', true);
       $mission  = $this->input->post('mission', true);
@@ -114,7 +114,7 @@ class Votes extends CI_Controller
           redirect('votes/candidate');
         }
       }
-      $this->db->set('nim', $nim);
+      $this->db->set('email', $email);
       $this->db->set('name', $name);
       $this->db->set('vision', $vision);
       $this->db->set('mission', $mission);
@@ -169,7 +169,7 @@ class Votes extends CI_Controller
         foreach ($sheet->getRowIterator() as $row) {
           if ($numRow > 1) {
             $data = [
-              'nim' => htmlspecialchars($row->getCellAtIndex(1)),
+              'email' => htmlspecialchars($row->getCellAtIndex(1)),
               'password' => htmlspecialchars(password_hash($row->getCellAtIndex(2), PASSWORD_DEFAULT)),
               'name' => htmlspecialchars($row->getCellAtIndex(3)),
               'prodi' => htmlspecialchars($row->getCellAtIndex(4)),
@@ -198,7 +198,7 @@ class Votes extends CI_Controller
     $data['user'] = $this->votes->getUserBySession();
     $data['voter'] = $this->votes->getVoterById($id);
 
-    $this->form_validation->set_rules('nim', 'NIM', 'required|trim|numeric');
+    $this->form_validation->set_rules('email', 'email', 'required|trim|numeric');
     $this->form_validation->set_rules('name', 'Full name', 'required|trim');
 
     if ($this->form_validation->run() == FALSE) {

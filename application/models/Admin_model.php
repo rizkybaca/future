@@ -9,13 +9,13 @@ class Admin_model extends CI_Model
 
 	public function getUserBySession()
 	{
-		return $data['user']=$this->db->get_where('user', ['nim' => $this->session->userdata('nim')])->row_array();
+		return $data['user']=$this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 	}
 
 	public function addCandidate()
 	{
 		$data=[
-			'nim'=>$this->input->post('nim', true),
+			'email'=>$this->input->post('email', true),
 			'name'=>$this->input->post('name', true),
 			'image'=>$this->input->post('image', true),
 			'vision'=>$this->input->post('vision', true)

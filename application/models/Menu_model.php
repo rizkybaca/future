@@ -43,7 +43,7 @@ class Menu_model extends CI_Model
 
 	public function getUserBySession()
 	{
-		return $data['user']=$this->db->get_where('user', ['nim' => $this->session->userdata('nim')])->row_array();
+		return $data['user']=$this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 	}
 
 	public function getSubmenuById($id)

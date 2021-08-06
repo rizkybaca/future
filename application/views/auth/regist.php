@@ -8,14 +8,14 @@
             <div class="text-center">
               <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
             </div>
-            <form class="user" method="POST" action="<?= base_url('auth/regist'); ?>">
+            <form class="user" method="POST" action="">
               <div class="form-group">
-                <input type="text" class="form-control form-control-user" id="name" name="name" placeholder="Nama lengkap" value="<?= set_value("name"); ?>">
-                <?= form_error('name', '<small class="text-danger pl-3">', '</small>'); ?> 
+                <input type="text" class="form-control form-control-user" id="name" name="name" placeholder="Full name" value="<?= set_value("name"); ?>">
+                <?= form_error('name', '<small class="text-danger pl-3">', '</small>'); ?>
               </div>
               <div class="form-group">
-                <input type="text" class="form-control form-control-user" id="nim" name="nim" placeholder="NIM" value="<?= set_value("nim"); ?>">
-                <?= form_error('nim', '<small class="text-danger pl-3">', '</small>'); ?>
+                <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Email" value="<?= set_value("email"); ?>">
+                <?= form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
               </div>
               <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
@@ -28,7 +28,7 @@
                 </div>
               </div>
               <button type="submit" class="btn btn-primary btn-user btn-block">
-                  Register Account
+                Register Account
               </button>
             </form>
             <hr>

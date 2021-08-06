@@ -22,7 +22,7 @@
 						    <tr>
 						      <th scope="col">#</th>
 						      <th scope="col">Profile Image</th>
-						      <th scope="col">NIM</th>
+						      <th scope="col">email</th>
 						      <th scope="col">Name</th>
 						      <th scope="col">Vision</th>
 						      <th scope="col">Mision</th>
@@ -37,7 +37,7 @@
 						      <td>
 						      	<img style="max-width:150px" src="<?= base_url('assets/img/candidate/').$c['image']; ?>">
 						      </td>
-						      <td><?= $c['nim']; ?></td>
+						      <td><?= $c['email']; ?></td>
 						      <td><?= $c['name']; ?></td>
 						      <td><?= nl2br($c['vision']); ?></td>
 						      <td><?= nl2br($c['mission']); ?></td>
@@ -77,7 +77,7 @@
 	      <div class="modal-body">
 
 	      	<div class="form-group">
-				    <input type="text" class="form-control" id="nim" name="nim" placeholder="NIM">
+				    <input type="text" class="form-control" id="email" name="email" placeholder="email">
 				  </div>
 				  <div class="form-group">
 				    <input type="text" class="form-control" id="name" name="name" placeholder="nama lengkap kandidat">

@@ -9,7 +9,7 @@ class Votes_model extends CI_Model
 
 	public function getUserBySession()
 	{
-		return $data['user']=$this->db->get_where('user', ['nim' => $this->session->userdata('nim')])->row_array();
+		return $data['user']=$this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 	}
 
 	public function getAllVoter()
@@ -19,7 +19,7 @@ class Votes_model extends CI_Model
 	public function getAllWhoVote()
 	{
 		$q="SELECT
-					`vote`.`date_voted`, `user`.`name`, `user`.`nim`
+					`vote`.`date_voted`, `user`.`name`, `user`.`email`
 					FROM `vote` JOIN `user`
 					ON `vote`.`user_id` = `user`.`id`				
 				";
@@ -67,7 +67,7 @@ class Votes_model extends CI_Model
 	public function editDataVoter($id)
 	{
 		$data=[
-			'nim'=>$this->input->post('nim', true),
+			'email'=>$this->input->post('email', true),
 			'name'=>$this->input->post('name', true)
 		];
 		$this->db->where('id', $this->input->post('id'));
