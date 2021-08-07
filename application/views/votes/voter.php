@@ -26,9 +26,10 @@
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">NIM</th>
+							<th scope="col">Email</th>
 							<th scope="col">Name</th>
-							<th scope="col">Prodi</th>
+							<th scope="col">Created At</th>
+							<th scope="col">Last Modified</th>
 							<?php if ($user['role_id'] == 1) : ?>
 								<th id="act" scope="col">Action</th>
 							<?php endif; ?>
@@ -40,9 +41,10 @@
 							foreach ($voter as $v) : ?>
 								<tr>
 									<th scope="row"><?= $i++; ?></th>
-									<td><?= $v['nim']; ?></td>
+									<td><?= $v['email']; ?></td>
 									<td><?= $v['name']; ?></td>
-									<td><?= $v['prodi']; ?></td>
+									<td><?= date("Y-m-d", $v['date_created']); ?></td>
+									<td><?= date("Y-m-d", $v['date_modified']); ?></td>
 									<?php if ($user['role_id'] == 1) : ?>
 										<td id="act">
 											<a href="<?= base_url('votes/voteredit/') . $v['id']; ?>" class="badge badge-success">edit</a>
@@ -53,7 +55,7 @@
 							<?php endforeach; ?>
 						<?php else : ?>
 							<tr>
-								<td colspan="4">No voter(s) found..</td>
+								<td colspan="5">No voter(s) found..</td>
 							</tr>
 						<?php endif; ?>
 					</tbody>

@@ -18,9 +18,8 @@ class Votes extends CI_Controller
   {
     $data['title'] = 'Candidates';
     $data['user'] = $this->votes->getUserBySession();
-    $data['candidate'] = $this->votes->getAllCandidate();
+    $data['candidate'] = $this->votes->getAllCandidateByCommunityId();
 
-    $this->form_validation->set_rules('email', 'email', 'required|trim|is_unique[candidate.email]|numeric');
     $this->form_validation->set_rules('name', 'Full name', 'required|trim');
     $this->form_validation->set_rules('vision', 'Vision', 'required|trim');
     $this->form_validation->set_rules('mission', 'Mission', 'required|trim');
@@ -56,11 +55,11 @@ class Votes extends CI_Controller
       }
 
       $data = [
-        'email' => $this->input->post('email', true),
-        'name' => $this->input->post('name', true),
+        'name' => htmlspecialchars($this->input->post('name', true)),
         'image' => $new_image,
-        'vision' => $this->input->post('vision', true),
-        'mission' => $this->input->post('mission', true)
+        'vision' => htmlspecialchars($this->input->post('vision', true)),
+        'mission' => htmlspecialchars($this->input->post('mission', true)),
+        'community_id' => $this->session->userdata('community_id')
       ];
       $this->db->insert('candidate', $data);
       $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">New Candidate added!</div>');
@@ -74,7 +73,6 @@ class Votes extends CI_Controller
     $data['user'] = $this->votes->getUserBySession();
     $data['candidate'] = $this->votes->getCandidateById($id);
 
-    $this->form_validation->set_rules('email', 'email', 'required|trim|numeric');
     $this->form_validation->set_rules('name', 'Full name', 'required|trim');
     $this->form_validation->set_rules('vision', 'Vision', 'required|trim');
     $this->form_validation->set_rules('mission', 'Mission', 'required|trim');
@@ -86,11 +84,9 @@ class Votes extends CI_Controller
       $this->load->view('votes/candidate-edit', $data);
       $this->load->view('templates/footer');
     } else {
-
-      $email      = $this->input->post('email', true);
-      $name     = $this->input->post('name', true);
-      $vision   = $this->input->post('vision', true);
-      $mission  = $this->input->post('mission', true);
+      $name     = htmlspecialchars($this->input->post('name', true));
+      $vision   = htmlspecialchars($this->input->post('vision', true));
+      $mission  = htmlspecialchars($this->input->post('mission', true));
 
       $upload_image = $_FILES['image']['name'];
 
@@ -114,11 +110,11 @@ class Votes extends CI_Controller
           redirect('votes/candidate');
         }
       }
-      $this->db->set('email', $email);
       $this->db->set('name', $name);
       $this->db->set('vision', $vision);
       $this->db->set('mission', $mission);
       $this->db->where('id', $this->input->post('id'));
+      $this->db->where('community_id', $this->session->userdata('community_id'));
       $this->db->update('candidate');
 
       $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Candidate updated!</div>');
@@ -142,7 +138,7 @@ class Votes extends CI_Controller
   {
     $data['title'] = 'Voter';
     $data['user'] = $this->votes->getUserBySession();
-    $data['voter'] = $this->votes->getAllVoter();
+    $data['voter'] = $this->votes->getAllVoterByCommunityId();
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/sidebar', $data);
@@ -172,11 +168,12 @@ class Votes extends CI_Controller
               'email' => htmlspecialchars($row->getCellAtIndex(1)),
               'password' => htmlspecialchars(password_hash($row->getCellAtIndex(2), PASSWORD_DEFAULT)),
               'name' => htmlspecialchars($row->getCellAtIndex(3)),
-              'prodi' => htmlspecialchars($row->getCellAtIndex(4)),
-              'role_id' => 2,
+              'role_id' => 5,
               'is_active' => 0,
-              'status' => 0
-
+              'status' => 0,
+              'date_created' => time(),
+              'date_modified' => time(),
+              'community_id' => $this->session->userdata('community_id')
             ];
             $this->votes->importDataVoter($data);
           }
@@ -198,7 +195,7 @@ class Votes extends CI_Controller
     $data['user'] = $this->votes->getUserBySession();
     $data['voter'] = $this->votes->getVoterById($id);
 
-    $this->form_validation->set_rules('email', 'email', 'required|trim|numeric');
+    $this->form_validation->set_rules('email', 'Email', 'required|trim');
     $this->form_validation->set_rules('name', 'Full name', 'required|trim');
 
     if ($this->form_validation->run() == FALSE) {
@@ -225,8 +222,8 @@ class Votes extends CI_Controller
   {
     $data['title'] = 'Report';
     $data['user'] = $this->votes->getUserBySession();
-    $data['voting'] = $this->votes->getAllDataVoting();;
-    $data['voter'] = $this->votes->getAllWhoVote();
+    $data['voting'] = $this->votes->getAllDataVotingByCommunityId();
+    $data['voter'] = $this->votes->getAllWhoVoteByCommunityId();
     $this->load->view('templates/header', $data);
     $this->load->view('templates/sidebar', $data);
     $this->load->view('templates/topbar', $data);
@@ -238,8 +235,8 @@ class Votes extends CI_Controller
   {
     $mpdf = new \Mpdf\Mpdf();
     $datauser = $this->votes->getUserBySession();
-    $datavoting = $this->votes->getAllDataVoting();
-    $datatotal = $this->votes->getVoteStat();
+    $datavoting = $this->votes->getAllDataVotingByCommunityId();
+    $datatotal = $this->votes->getVoteStatByCommunityId();
     $data = $this->load->view('pdf/voting', ['voting' => $datavoting, 'user' => $datauser, 'count' => $datatotal], true);
     $mpdf->WriteHTML($data);
     $mpdf->Output();
@@ -249,8 +246,8 @@ class Votes extends CI_Controller
   {
     $mpdf = new \Mpdf\Mpdf();
     $datauser = $this->votes->getUserBySession();
-    $datavoter = $this->votes->getAllWhoVote();
-    $datatotal = $this->votes->getVoteStat();
+    $datavoter = $this->votes->getAllWhoVoteByCommunityId();
+    $datatotal = $this->votes->getVoteStatByCommunityId();
     $data = $this->load->view('pdf/voter', ['voter' => $datavoter, 'user' => $datauser, 'count' => $datatotal], true);
     $mpdf->WriteHTML($data);
     $mpdf->Output();
