@@ -15,7 +15,8 @@ class Quickcount extends Rest_Controller
   }
   public function index_get()
   {
-    $qc = $this->qc->getQuickCount();
+    $community_id = $this->get('community_id');
+    $qc = $this->qc->getQuickCount($community_id);
     if ($qc) {
       $this->response(
         [
@@ -30,5 +31,5 @@ class Quickcount extends Rest_Controller
         'message' => 'no candidate were found'
       ], REST_Controller::HTTP_NOT_FOUND);
     }
-  } 
+  }
 }

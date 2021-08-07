@@ -16,11 +16,12 @@ class Candidate extends Rest_Controller
   public function index_get()
   {
     $id = $this->get('id');
+    $community_id = $this->get('community_id');
 
     if ($id === NULL) {
-      $candidate = $this->candidate->getCandidate();
+      $candidate = $this->candidate->getCandidate($id = null, $community_id);
     } else {
-      $candidate = $this->candidate->getCandidate($id);
+      $candidate = $this->candidate->getCandidate($id, $community_id);
     }
     if ($candidate) {
       $this->response(

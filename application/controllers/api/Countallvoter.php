@@ -15,7 +15,8 @@ class Countallvoter extends Rest_Controller
   }
   public function index_get()
   {
-    $user = $this->cav->getAllVoter();
+    $community_id = $this->get('community_id');
+    $user = $this->cav->getAllVoter($community_id);
 
     if ($user) {
       $this->response(

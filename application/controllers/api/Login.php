@@ -30,10 +30,10 @@ class Login extends Rest_Controller
 
   public function index_get()
   {
-    $nim = $this->get('nim');
+    $email = $this->get('email');
     $password = $this->get('password');
 
-    $user = $this->login->getUser($nim);
+    $user = $this->login->getUser($email);
 
     $cek_password = password_verify($password, $user['password']);
 

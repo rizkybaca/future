@@ -18,7 +18,8 @@ class Voting extends Rest_Controller
     $data = [
       'candidate_id' => $this->post('candidate_id'),
       'user_id' => $this->post('user_id'),
-      'date_voted' => time()
+      'date_voted' => time(),
+      'community_id' => $this->post('community_id')
     ];
 
     if ($this->voting->createVote($data) > 0) {

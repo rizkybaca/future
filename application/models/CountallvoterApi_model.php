@@ -1,29 +1,30 @@
 <?php
 class CountallvoterApi_model extends CI_Model
 {
-  public function getAllVoter()
+  public function getAllVoter($community_id)
   {
     $q = "SELECT
 					COUNT(`id`) AS `voter`
 					FROM `user`
+          WHERE `community_id`=$community_id
 				";
     return $this->db->query($q)->result_array();
   }
-  public function getWhoVote()
+  public function getWhoVote($community_id)
   {
     $q = "SELECT
 					COUNT(`id`) AS `voter`
 					FROM `user`
-          WHERE `status`=1
+          WHERE `status`= 1 AND `community_id`=$community_id
 				";
     return $this->db->query($q)->result_array();
   }
-  public function getWhoHaventVote()
+  public function getWhoHaventVote($community_id)
   {
     $q = "SELECT
 					COUNT(`id`) AS `voter`
 					FROM `user`
-          WHERE `status`=0
+          WHERE `status`= 0 AND `community_id`=$community_id
 				";
     return $this->db->query($q)->result_array();
   }

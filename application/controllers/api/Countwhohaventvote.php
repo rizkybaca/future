@@ -15,7 +15,8 @@ class Countwhohaventvote extends Rest_Controller
   }
   public function index_get()
   {
-    $user = $this->cav->getWhoHaventVote();
+    $community_id = $this->get('community_id');
+    $user = $this->cav->getWhoHaventVote($community_id);
 
     if ($user) {
       $this->response(

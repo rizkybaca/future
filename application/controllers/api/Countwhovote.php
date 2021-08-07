@@ -15,7 +15,8 @@ class Countwhovote extends Rest_Controller
   }
   public function index_get()
   {
-    $user = $this->cav->getWhoVote();
+    $community_id = $this->get('community_id');
+    $user = $this->cav->getWhoVote($community_id);
 
     if ($user) {
       $this->response(
