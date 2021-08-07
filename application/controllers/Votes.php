@@ -218,6 +218,44 @@ class Votes extends CI_Controller
     redirect('votes/voter');
   }
 
+  public function activate()
+  {
+
+    $data['title'] = 'Activate Voter';
+    $data['user'] = $this->votes->getUserBySession();
+    $data['voter'] = $this->votes->getAllVoterByCommunityId();
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('votes/activate-voter', $data);
+    $this->load->view('templates/footer');
+  }
+
+  public function activateVoter()
+  {
+    $data = ['is_active' => 1];
+
+    $this->db->where('role_id', "5");
+    $this->db->where('community_id', $this->session->userdata('community_id'));
+    $this->db->update('user', $data);
+
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Voter now is active!</div>');
+    redirect('votes/activate');
+  }
+
+  public function nonActivateVoter()
+  {
+    $data = ['is_active' => 0];
+
+    $this->db->where('role_id', "5");
+    $this->db->where('community_id', $this->session->userdata('community_id'));
+    $this->db->update('user', $data);
+
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Voter now is nonactive!</div>');
+    redirect('votes/activate');
+  }
+
   public function report()
   {
     $data['title'] = 'Report';
