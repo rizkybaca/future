@@ -39,15 +39,9 @@ class User extends Rest_Controller
       'status' => $this->put('status')
     ];
     if ($this->user->updateUser($data, $id) > 0) {
-      $this->response([
-        'status' => true,
-        'message' => 'user has been modified!'
-      ], REST_Controller::HTTP_OK);
+      $this->response(REST_Controller::HTTP_OK);
     } else {
-      $this->response([
-        'status' => false,
-        'message' => 'failed to modified user!'
-      ], REST_Controller::HTTP_BAD_REQUEST);
+      $this->response(REST_Controller::HTTP_BAD_REQUEST);
     }
   }
 }

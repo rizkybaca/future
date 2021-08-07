@@ -23,15 +23,9 @@ class Voting extends Rest_Controller
     ];
 
     if ($this->voting->createVote($data) > 0) {
-      $this->response([
-        'status' => true,
-        'message' => 'voting successed!'
-      ], REST_Controller::HTTP_CREATED);
+      $this->response(REST_Controller::HTTP_CREATED);
     } else {
-      $this->response([
-        'status' => false,
-        'message' => 'failed to voting!'
-      ], REST_Controller::HTTP_BAD_REQUEST);
+      $this->response(REST_Controller::HTTP_BAD_REQUEST);
     }
   }
 }

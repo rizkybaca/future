@@ -19,17 +19,11 @@ class Quickcount extends Rest_Controller
     $qc = $this->qc->getQuickCount($community_id);
     if ($qc) {
       $this->response(
-        [
-          'status' => true,
-          'data' => $qc
-        ],
+        $qc,
         REST_Controller::HTTP_OK
       );
     } else {
-      $this->response([
-        'status' => false,
-        'message' => 'no candidate were found'
-      ], REST_Controller::HTTP_NOT_FOUND);
+      $this->response(REST_Controller::HTTP_NOT_FOUND);
     }
   }
 }

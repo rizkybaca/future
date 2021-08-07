@@ -29,10 +29,7 @@ class Candidate extends Rest_Controller
         REST_Controller::HTTP_OK
       );
     } else {
-      $this->response([
-        'status' => false,
-        'message' => 'no candidate were found'
-      ], REST_Controller::HTTP_NOT_FOUND);
+      $this->response([], REST_Controller::HTTP_NOT_FOUND);
     }
   }
 }
