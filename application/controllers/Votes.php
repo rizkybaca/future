@@ -157,6 +157,8 @@ class Votes extends CI_Controller
     if ($this->upload->do_upload('file')) {
       $file = $this->upload->data();
       $reader = ReaderEntityFactory::createXLSXReader();
+      $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*_";
+      $password = substr(str_shuffle($chars), 0, 8);
 
       $reader->open('uploads/' . $file['file_name']);
 
@@ -164,10 +166,11 @@ class Votes extends CI_Controller
         $numRow = 1;
         foreach ($sheet->getRowIterator() as $row) {
           if ($numRow > 1) {
+            $email = $row->getCellAtIndex(1);
             $data = [
-              'email' => htmlspecialchars($row->getCellAtIndex(1)),
-              'password' => htmlspecialchars(password_hash($row->getCellAtIndex(2), PASSWORD_DEFAULT)),
-              'name' => htmlspecialchars($row->getCellAtIndex(3)),
+              'email' => htmlspecialchars($email),
+              'password' => htmlspecialchars(password_hash($password, PASSWORD_DEFAULT)),
+              'name' => htmlspecialchars($row->getCellAtIndex(2)),
               'role_id' => 5,
               'is_active' => 0,
               'status' => 0,
@@ -176,6 +179,7 @@ class Votes extends CI_Controller
               'community_id' => $this->session->userdata('community_id')
             ];
             $this->votes->importDataVoter($data);
+            $this->_sendEmail($password, $email, 'forward');
           }
           $numRow++;
         }
@@ -186,6 +190,43 @@ class Votes extends CI_Controller
       }
     } else {
       echo $this->upload->display_errors();
+    }
+  }
+
+  private function _sendEmail($password, $email, $type)
+  {
+    //change setting "access app less security" at gmail acc first
+    $config = [
+      'protocol' => 'smtp',
+      'smtp_host' => 'ssl://smtp.googlemail.com',
+      'smtp_user' => 'kotaksuara.kangkoding@gmail.com',
+      'smtp_pass' => 'drinkAndYolo1',
+      'smtp_port' => 465,
+      'mailtype' => 'html',
+      'charset' => 'utf-8',
+      'newline' => "\r\n"
+    ];
+    $this->load->library('email', $config);
+    $this->email->initialize($config);
+
+    $this->email->from('kotaksuara.kangkoding@gmail.com', 'Kotak Suara | by : Kangkoding');
+    $this->email->to($email);
+    if ($type == 'forward') {
+      $message =  'This is your account for election at Kotak Suara. <br/>' .
+        'Website : <a href="' . base_url() . '">www.voteapi.kangkoding.com</a> <br/>' .
+        'Email : ' . $email . '<br/>' .
+        'Password : ' . $password . ' <br/>' .
+        'Now you can login with this email and password*. <br/>' .
+        '<br/>' .
+        '*when your community admin has already activate this account';
+      $this->email->subject('Your Kotak Suara Account');
+      $this->email->message($message);
+    }
+    if ($this->email->send()) {
+      return true;
+    } else {
+      echo $this->email->print_debugger();
+      die;
     }
   }
 
