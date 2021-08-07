@@ -11,6 +11,7 @@ class Votes extends CI_Controller
   {
     parent::__construct();
     is_logged_in();
+    is_had_community();
     $this->load->model('Votes_model', 'votes');
   }
 

@@ -36,3 +36,11 @@ function check_access($role_id, $menu_id)
 		return "checked='checked'";
 	}
 }
+
+function is_had_community()
+{
+	$ci = get_instance();
+	if ($ci->session->userdata('community_id') == 0) {
+		redirect('community');
+	}
+}
