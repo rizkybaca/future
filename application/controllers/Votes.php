@@ -139,7 +139,28 @@ class Votes extends CI_Controller
   {
     $data['title'] = 'Voter';
     $data['user'] = $this->votes->getUserBySession();
-    $data['voter'] = $this->votes->getAllVoterByCommunityId();
+
+    // load lib pagination
+    $this->load->library('pagination');
+
+    // get keyword
+    if ($this->input->post('submit')) {
+      $data['keyword'] = $this->input->post('keyword');
+      $this->session->set_userdata('keyword', $data['keyword']);
+    } else {
+      $data['keyword'] = $this->session->userdata('keyword');
+    }
+
+    // config
+    $config['total_rows'] = $this->votes->countSearchVoterCommunityId($data['keyword']);
+    $data['rows'] = $config['total_rows'];
+    $config['per_page'] = 10;
+
+    // init
+    $this->pagination->initialize($config);
+
+    $data['start'] = $this->uri->segment(3);
+    $data['voter'] = $this->votes->getVotersByCommunityId($config['per_page'], $data['start'], $data['keyword']);
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/sidebar', $data);
@@ -217,9 +238,7 @@ class Votes extends CI_Controller
         'Website : <a href="' . base_url() . '">www.voteapi.kangkoding.com</a> <br/>' .
         'Email : ' . $email . '<br/>' .
         'Password : ' . $password . ' <br/>' .
-        'Now you can login with this email and password*. <br/>' .
-        '<br/>' .
-        '*when your community admin has already activate this account';
+        'Now you can login with this email and password (when your community admin has already activate this account)';
       $this->email->subject('Your Kotak Suara Account');
       $this->email->message($message);
     }

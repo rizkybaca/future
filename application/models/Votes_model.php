@@ -21,9 +21,30 @@ class Votes_model extends CI_Model
 	public function getAllVoterByCommunityId()
 	{
 		return $this->db->get_where('user', [
-			'role_id' => '5',
+			'role_id' => 5,
 			'community_id' => $this->session->userdata('community_id')
 		])->result_array();
+	}
+
+	public function getVotersByCommunityId($limit, $start, $keyword = null)
+	{
+		$community_id = $this->session->userdata('community_id');
+		if ($keyword) {
+			$this->db->like('name', $keyword);
+		}
+		return $this->db->get_where('user', [
+			'role_id' => 5,
+			'community_id' => $community_id
+		], $limit, $start)->result_array();
+	}
+
+	public function countAllVotersByCommunityId()
+	{
+		$community_id = $this->session->userdata('community_id');
+		return $this->db->get_where('user', [
+			'role_id' => 5,
+			'community_id' => $community_id
+		])->num_rows();
 	}
 
 	public function getAllWhoVote()
@@ -45,6 +66,18 @@ class Votes_model extends CI_Model
 					WHERE `vote`.`community_id`= $community_id			
 				";
 		return $this->db->query($q)->result_array();
+	}
+
+	public function countSearchVoterCommunityId($keyword)
+	{
+		$community_id = $this->session->userdata('community_id');
+		$q = "SELECT *
+					FROM `user`
+					WHERE `community_id`= $community_id	
+					AND `role_id`= 5
+					AND `name` LIKE	'%$keyword%'
+				";
+		return $this->db->query($q)->num_rows();
 	}
 
 	public function getAllVoterCommittees()

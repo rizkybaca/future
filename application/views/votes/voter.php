@@ -19,7 +19,21 @@
 	<?php endif; ?>
 
 	<div class="row">
-		<div class="col-lg-6">
+		<div class="col-md-6">
+			<form action="<?= base_url('votes/voter'); ?>" method="POST">
+				<div class="input-group mb-3">
+					<input type="text" name="keyword" autocomplete="off" autofocus class="form-control" placeholder="search voter here..">
+					<div class="input-group-append">
+						<input class="btn btn-outline-primary" name="submit" type="submit" value="search">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg">
+			<h6>Result : <?= $rows; ?></h6>
 			<?= $this->session->flashdata('message'); ?>
 			<div class="table-responsive-xl">
 				<table class="table table-hover">
@@ -30,17 +44,16 @@
 							<th scope="col">Name</th>
 							<th scope="col">Created At</th>
 							<th scope="col">Last Modified</th>
-							<?php if ($user['role_id'] == 1) : ?>
+							<?php if ($user['role_id'] == 1 || $user['role_id'] == 6) : ?>
 								<th id="act" scope="col">Action</th>
 							<?php endif; ?>
 						</tr>
 					</thead>
 					<tbody>
 						<?php if (!empty($voter)) : ?>
-							<?php $i = 1;
-							foreach ($voter as $v) : ?>
+							<?php foreach ($voter as $v) : ?>
 								<tr>
-									<th scope="row"><?= $i++; ?></th>
+									<th scope="row"><?= ++$start; ?></th>
 									<td><?= $v['email']; ?></td>
 									<td><?= $v['name']; ?></td>
 									<td><?= date("Y-m-d", $v['date_created']); ?></td>
@@ -55,11 +68,12 @@
 							<?php endforeach; ?>
 						<?php else : ?>
 							<tr>
-								<td colspan="5">No voter(s) found..</td>
+								<td colspan="6">No voter(s) found..</td>
 							</tr>
 						<?php endif; ?>
 					</tbody>
 				</table>
+				<?= $this->pagination->create_links(); ?>
 			</div>
 		</div>
 	</div>
