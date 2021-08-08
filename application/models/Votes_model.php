@@ -26,6 +26,15 @@ class Votes_model extends CI_Model
 		])->result_array();
 	}
 
+	public function getAllNewVoterByCommunityId()
+	{
+		return $this->db->get_where('user', [
+			'role_id' => 5,
+			'community_id' => $this->session->userdata('community_id'),
+			'is_active' => 0
+		])->result_array();
+	}
+
 	public function getVotersByCommunityId($limit, $start, $keyword = null)
 	{
 		$community_id = $this->session->userdata('community_id');

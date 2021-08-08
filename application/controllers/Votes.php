@@ -285,6 +285,7 @@ class Votes extends CI_Controller
     $data['title'] = 'Activate Voter';
     $data['user'] = $this->votes->getUserBySession();
     $data['voter'] = $this->votes->getAllVoterByCommunityId();
+    $data['new_voter'] = $this->votes->getAllNewVoterByCommunityId();
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/sidebar', $data);
